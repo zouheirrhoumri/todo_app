@@ -58,3 +58,14 @@ void ajouter_tache(tache t[])
     ID++;
 }
 
+void ajouter_plus(tache t[])
+{
+    int nbr, p;
+    printf("\t\tcombien vous voulez ajouter :");
+    scanf("%d", &nbr);
+    p = nbr + dim;
+    for (int i = dim; i < p; i++)
+    {
+        ajouter_tache(t);
+    }
+}
