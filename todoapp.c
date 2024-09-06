@@ -69,3 +69,16 @@ void ajouter_plus(tache t[])
         ajouter_tache(t);
     }
 }
+
+void afficher_tache(tache t[])
+{
+    printf("\t\t+------------------------------------------------------------------------------+\n");
+    printf("\t\t| Id |        Tache         |      Description     | Date limite |    Status   |\n");
+    printf("\t\t+------------------------------------------------------------------------------+\n");
+    for (int i = 0; i < dim; i++)
+    {
+
+        printf("\t\t| %-2d | %-20s | %-20s | %2d-%2d-%4d  | %-11s |\n", t[i].id, t[i].titre, t[i].desc, t[i].deadline.jour, t[i].deadline.mois, t[i].deadline.annee, t[i].status);
+    }
+    printf("\t\t+------------------------------------------------------------------------------+\n");
+}
