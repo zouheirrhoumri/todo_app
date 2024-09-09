@@ -122,6 +122,44 @@ void afficher_tache()
     
     printf("\t\t+------------------------------------------------------------------------------+\n");
 }
+
+
+int menu()
+{
+    int choix;
+    while (1)
+    {
+        printf("\t\tMenu:\n");
+        printf("\t\t1. ajouter une seul tache \n");
+        printf("\t\t2. ajouter plusieur taches \n");
+        printf("\t\t3. menu affichage \n");
+        printf("\t\t4. menu gestion\n");
+        printf("\t\t5. statistiques\n");
+        printf("\t\t6. quitter \n");
+        printf("\t\tEnter votre choix (1-6): ");
+        scanf("%d", &choix);
+
+        switch (choix)
+        {
+        case 1:
+            ajouter_tache(t);
+            break;
+        case 2:
+            ajouter_plus(t);
+            break;
+        case 6:
+            return 0;
+        default:
+            printf("\t\terreur, entrer en entier de 1 a 6.\n");
+            return 0;
+        }
+    }
+
+    return 0;
+}
+
+
+
  int main(){
    //   ajouter_tache();
    afficher_tache();
