@@ -19,17 +19,22 @@ tache t[100];
 int ID = 0;
 int dim = 0;
 
-void ajouter_tache()
+void ajouter_tache(tache t[])
 {
-    tache temp;
+    FILE *file = fopen("taches.txt", "a");
+    if (file == NULL)
+    {
+        printf("Erreur lors de l'ouverture du fichier\n");
+        return;
+    }
 
     int choix2;
-    temp.id = ID + 1;
+    t[dim].id = ID + 1;
     printf("\t\ttitre : ");
-    scanf(" %[^\n]", temp.titre);
-    strupr(temp.titre);
+    scanf(" %[^\n]", t[dim].titre);
+    strupr(t[dim].titre);
     printf("\t\tdescription : ");
-    scanf(" %[^\n]", temp.desc);
+    scanf(" %[^\n]", t[dim].desc);
     do
     {
         printf("\t\tStatus du tache :\n \t1- A realiser | 2- En cours | 3- Finalisee  : ");
@@ -39,42 +44,23 @@ void ajouter_tache()
     switch (choix2)
     {
     case 1:
-        strcpy(temp.status, "A realiser");
+        strcpy(t[dim].status, "A realiser");
         break;
     case 2:
-        strcpy(temp.status, "En cours");
+        strcpy(t[dim].status, "En cours");
         break;
     case 3:
-        strcpy(temp.status, "Finalisee");
+        strcpy(t[dim].status, "Finalisee");
         break;
     default:
         printf("valeur invalide.\n");
     }
-    int scan=0;
     do
     {
-        
         printf("\t\tsaisir le deadline :");
-        scan= scanf("%d/%d/%d", &temp.deadline.jour, &temp.deadline.mois, &temp.deadline.annee);
-       // printf("%d/%d/%d", temp.deadline.jour, temp.deadline.mois, temp.deadline.annee);
-    } while (scan != 3);
-    
-    
-   // } while (temp.deadline.jour <= 0 || temp.deadline.jour >= 32 || temp.deadline.mois <= 0 || temp.deadline.mois >= 13 || t[dim].deadline.annee <= 0);
-     // t[dim] = temp;
-   FILE *file = fopen("taches.txt", "ab");
-    if (file != NULL)
-    {
-        fwrite(&temp , sizeof(temp) , 1 , file);
-    }
-    else
-    {
-        printf("Erreur lors de l'ouverture du fichier\n");
-        return;
-    }
-    fclose(file);
-   //dim++ ;
-
+        scanf("%d/%d/%d", &t[dim].deadline.jour, &t[dim].deadline.mois, &t[dim].deadline.annee);
+    } while (t[dim].deadline.jour <= 0 || t[dim].deadline.jour >= 32 || t[dim].deadline.mois <= 0 || t[dim].deadline.mois >= 13 || t[dim].deadline.annee <= 0);
+    dim++;
     ID++;
 }
 
@@ -90,78 +76,39 @@ void ajouter_plus(tache t[])
     }
 }
 
-void afficher_tache()
+void afficher_tache(tache t[])
 {
-    tache temp;
     printf("\t\t+------------------------------------------------------------------------------+\n");
     printf("\t\t| Id |        Tache         |      Description     | Date limite |    Status   |\n");
     printf("\t\t+------------------------------------------------------------------------------+\n");
-    // for (int i = 0; i < dim; i++)
-    // {
-
-    //     printf("\t\t| %-2d | %-20s | %-20s | %2d-%2d-%4d  | %-11s |\n", t[i].id, t[i].titre, t[i].desc, t[i].deadline.jour, t[i].deadline.mois, t[i].deadline.annee, t[i].status);
-    // }
-    FILE *file = fopen("taches.txt", "rb");
-
-        if (file != NULL)
+    for (int i = 0; i < dim; i++)
     {
-        while (fread(&temp , sizeof(temp) , 1 , file))
-    {
-           printf("\t\t| %-2d | %-20s | %-20s | %2d-%2d-%4d  | %-11s |\n", temp.id, temp.titre, temp.desc, temp.deadline.jour, temp.deadline.mois, temp.deadline.annee, temp.status);
-    
-    }
-    }
-    else
-    {
-        printf("Erreur lors de l'ouverture du fichier\n");
-        return;
-    }
-    fclose(file);
 
-    
-    
+        printf("\t\t| %-2d | %-20s | %-20s | %2d-%2d-%4d  | %-11s |\n", t[i].id, t[i].titre, t[i].desc, t[i].deadline.jour, t[i].deadline.mois, t[i].deadline.annee, t[i].status);
+    }
     printf("\t\t+------------------------------------------------------------------------------+\n");
 }
 
-
-int menu()
+void tri_alpha()
 {
-    int choix;
-    while (1)
-    {
-        printf("\t\tMenu:\n");
-        printf("\t\t1. ajouter une seul tache \n");
-        printf("\t\t2. ajouter plusieur taches \n");
-        printf("\t\t3. menu affichage \n");
-        printf("\t\t4. menu gestion\n");
-        printf("\t\t5. statistiques\n");
-        printf("\t\t6. quitter \n");
-        printf("\t\tEnter votre choix (1-6): ");
-        scanf("%d", &choix);
 
-        switch (choix)
+    tache r[100], temp;
+    for (int i = 0; i < dim; i++)
+    {
+        r[i] = t[i];
+    }
+    for (int i = 0; i < dim; i++)
+    {
+        for (int j = i + 1; i < dim; i++)
         {
-        case 1:
-            ajouter_tache(t);
-            break;
-        case 2:
-            ajouter_plus(t);
-            break;
-        case 6:
-            return 0;
-        default:
-            printf("\t\terreur, entrer en entier de 1 a 6.\n");
-            return 0;
+            if (strcmp(r[i].titre, r[j].titre) > 0)
+            {
+                temp = r[i];
+                r[i] = r[j];
+                r[j] = temp;
+            }
         }
     }
-
-    return 0;
+    printf("\t\tLes taches triees alphabitique : \n");
+    afficher_tache(r);
 }
-
-
-
- int main(){
-   //   ajouter_tache();
-   afficher_tache();
-    return 0;
- }
